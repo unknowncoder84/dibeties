@@ -1,6 +1,6 @@
-# GlucoVision - AI-Powered Health Management System
+# GlucoVision - Personal Health Monitoring
 
-A modern, full-stack health management application for diabetes monitoring and prevention with AI-powered analysis.
+A personal health monitoring app for managing diabetes and tracking your wellness journey. Built with Next.js 16, featuring AI-powered insights, real-time tracking, and personalized health recommendations.
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black)
@@ -12,7 +12,7 @@ A modern, full-stack health management application for diabetes monitoring and p
 - **AI-Powered Analysis** - Upload medical reports and get instant AI-driven health insights
 - **Interactive Dashboard** - Real-time health metrics with beautiful charts
 - **Smart Health Consultant** - 24/7 AI chatbot for personalized health advice
-- **Appointment Management** - Book and manage medical appointments
+- **Appointment Management** - Book and manage your medical appointments
 - **Health Alerts** - Real-time notifications for health events
 - **Data Persistence** - All your data saved securely in browser
 - **Responsive Design** - Works perfectly on all devices
@@ -20,7 +20,7 @@ A modern, full-stack health management application for diabetes monitoring and p
 
 ## 🚀 Live Demo
 
-**Demo Credentials**: Any email and password works!
+**Demo Mode**: Enter any email and password to create an account!
 - Example: `user@example.com` / `password123`
 
 ## 📸 Screenshots
@@ -103,12 +103,12 @@ npm start
 - Risk level assessment
 - AI health insights
 
-### ✅ Upload & Scan
+### Upload & Scan
 - Drag & drop file upload
 - Support for PDF, images, and text files
 - AI-powered document analysis
 - Risk classification (Normal/Prediabetic/Diabetic)
-- Personalized recommendations
+- Personalized health recommendations
 
 ### ✅ AI Consultant
 - Interactive chat interface
@@ -117,8 +117,8 @@ npm start
 - Suggested questions
 - Message history
 
-### ✅ Appointments
-- Book new appointments
+### Appointments
+- Book new appointments with your healthcare provider
 - View upcoming and past appointments
 - Complete or cancel appointments
 - Appointment types: checkup, followup, consultation, emergency
@@ -201,9 +201,9 @@ Data clears only on logout.
 ## 🔒 Security Notes
 
 **Current (Demo Mode)**:
-- Any email/password works for login
+- Any email/password creates an account
 - Data stored in browser localStorage
-- Perfect for demo and testing
+- Perfect for personal use and testing
 
 **For Production**:
 - Integrate Supabase for authentication

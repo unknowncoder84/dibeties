@@ -91,8 +91,8 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Our Diabetes Management System combines cutting-edge machine learning with real-time health monitoring
-              to predict, prevent, and manage diabetes effectively.
+              GlucoVision helps you monitor and manage your health with AI-powered insights, real-time tracking,
+              and personalized recommendations for better diabetes management.
             </p>
 
             <div className="flex items-center justify-center gap-4 flex-wrap mb-16">
@@ -242,7 +242,7 @@ export default function LandingPage() {
               Get in Touch
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Have questions about our Diabetes Management System? Our team is here to help you start your health journey.
+              Have questions about GlucoVision? We're here to help you start your health journey.
             </p>
           </div>
 
