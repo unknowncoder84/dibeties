@@ -5,7 +5,7 @@
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20.11.0"
   NPM_FLAGS = "--legacy-peer-deps"
 
 # Redirect all requests to index.html for client-side routing
