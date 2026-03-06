@@ -52,7 +52,7 @@ export default function LandingPage() {
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-emerald-500 flex items-center justify-center shadow-md">
               <Activity className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold text-white">GlucoVision</span>
+            <span className="text-lg font-bold text-white">Diabetes Management System</span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#about" className="text-sm text-gray-400 hover:text-blue-400 transition-colors font-medium">About</a>
@@ -91,7 +91,7 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              GlucoVision helps you monitor and manage your health with AI-powered insights, real-time tracking,
+              Our Diabetes Management System helps you monitor and manage your health with AI-powered insights, real-time tracking,
               and personalized recommendations for better diabetes management.
             </p>
 
@@ -242,7 +242,7 @@ export default function LandingPage() {
               Get in Touch
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Have questions about GlucoVision? We're here to help you start your health journey.
+              Have questions about our Diabetes Management System? We're here to help you start your health journey.
             </p>
           </div>
 

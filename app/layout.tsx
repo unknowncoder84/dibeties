@@ -9,7 +9,7 @@ const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const _geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
 
 export const metadata: Metadata = {
-  title: 'GlucoVision - Smart Health Monitoring',
+  title: 'Diabetes Management System - Smart Health Monitoring',
   description: 'Personal health monitoring app with AI-powered insights, real-time tracking, and personalized recommendations for diabetes management.',
   generator: 'v0.app',
   icons: {

@@ -46,7 +46,7 @@ export default function SignupPage() {
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-emerald-500 flex items-center justify-center">
             <Activity className="w-6 h-6 text-white" />
           </div>
-          <span className="text-xl font-bold text-white">GlucoVision</span>
+          <span className="text-xl font-bold text-white">Diabetes Management System</span>
         </Link>
 
         <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] p-8 shadow-lg">
