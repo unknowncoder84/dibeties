@@ -23,13 +23,17 @@ export default function SignupPage() {
       setError("Please fill in all fields")
       return
     }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters")
+      return
+    }
     setError("")
     setLoading(true)
     try {
       await signup(name, email, password, "User")
       router.push("/dashboard")
-    } catch {
-      setError("Signup failed. Please try again.")
+    } catch (err: any) {
+      setError(err.message || "Signup failed. Please try again.")
     } finally {
       setLoading(false)
     }

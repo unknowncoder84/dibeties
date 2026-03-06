@@ -280,16 +280,49 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [patientRecords])
 
   const login = useCallback(async (email: string, password: string) => {
-    await new Promise((r) => setTimeout(r, 1200))
+    await new Promise((r) => setTimeout(r, 800))
     
-    // Regular login - everyone is a user
-    setIsAuthenticated(true)
-    setUser({ name: email.split("@")[0], email })
-    return true
+    // Check if user exists in localStorage
+    const savedUsers = localStorage.getItem("glucovision_users")
+    const users = savedUsers ? JSON.parse(savedUsers) : {}
+    
+    // Check if user exists
+    if (users[email]) {
+      // Verify password
+      if (users[email].password === password) {
+        setIsAuthenticated(true)
+        setUser({ name: users[email].name, email })
+        return true
+      } else {
+        throw new Error("Invalid password")
+      }
+    } else {
+      // Auto-create account for demo purposes
+      const name = email.split("@")[0]
+      users[email] = { name, password }
+      localStorage.setItem("glucovision_users", JSON.stringify(users))
+      setIsAuthenticated(true)
+      setUser({ name, email })
+      return true
+    }
   }, [])
 
-  const signup = useCallback(async (name: string, email: string, _password: string, _role: string) => {
-    await new Promise((r) => setTimeout(r, 1200))
+  const signup = useCallback(async (name: string, email: string, password: string, _role: string) => {
+    await new Promise((r) => setTimeout(r, 800))
+    
+    // Save user to localStorage
+    const savedUsers = localStorage.getItem("glucovision_users")
+    const users = savedUsers ? JSON.parse(savedUsers) : {}
+    
+    // Check if user already exists
+    if (users[email]) {
+      throw new Error("User already exists. Please login instead.")
+    }
+    
+    // Create new user
+    users[email] = { name, password }
+    localStorage.setItem("glucovision_users", JSON.stringify(users))
+    
     setIsAuthenticated(true)
     setUser({ name, email })
     return true
