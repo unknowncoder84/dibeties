@@ -102,7 +102,10 @@ export default function UploadPage() {
   const [progress, setProgress] = useState(0)
   const [result, setResult] = useState<ScanResult | null>(null)
   const [dragActive, setDragActive] = useState(false)
+  const [showConverter, setShowConverter] = useState(false)
+  const [convertedText, setConvertedText] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
+  const converterInputRef = useRef<HTMLInputElement>(null)
 
   const processFile = useCallback(
     async (file: File) => {
@@ -224,6 +227,102 @@ export default function UploadPage() {
     if (file) processFile(file)
   }
 
+  async function convertFileToDemo(file: File) {
+    setFileName(file.name)
+    
+    // Read file content
+    const fileContent = await file.text()
+    
+    // Extract patient info
+    const patientInfo = extractPatientInfo(file.name, fileContent)
+    
+    // Generate demo-style formatted text
+    const demoText = `MEDICAL LABORATORY REPORT
+========================================
+
+Patient Information:
+--------------------
+Patient Name: ${patientInfo.patientName}
+Patient ID: ${patientInfo.patientId}
+Age: ${patientInfo.age} years
+Gender: ${patientInfo.gender}
+Date of Collection: ${new Date().toLocaleDateString()}
+Report Date: ${new Date().toLocaleDateString()}
+
+GLUCOSE METABOLISM PANEL
+-------------------------
+Fasting Blood Glucose: ${85 + Math.floor(Math.random() * 80)} mg/dL
+HbA1c: ${5.0 + Math.random() * 4}%
+Postprandial Glucose (2hr): ${110 + Math.floor(Math.random() * 100)} mg/dL
+
+PHYSICAL MEASUREMENTS
+---------------------
+Height: ${150 + Math.floor(Math.random() * 40)} cm
+Weight: ${50 + Math.floor(Math.random() * 50)} kg
+BMI: ${20 + Math.random() * 15} kg/m²
+
+VITAL SIGNS
+-----------
+Blood Pressure: ${110 + Math.floor(Math.random() * 30)}/${70 + Math.floor(Math.random() * 20)} mmHg
+Heart Rate: ${60 + Math.floor(Math.random() * 40)} bpm
+Respiratory Rate: ${14 + Math.floor(Math.random() * 6)} breaths/min
+
+KIDNEY FUNCTION TESTS
+----------------------
+Creatinine: ${0.6 + Math.random() * 0.8} mg/dL
+Blood Urea Nitrogen (BUN): ${8 + Math.floor(Math.random() * 15)} mg/dL
+eGFR: ${80 + Math.floor(Math.random() * 40)} mL/min/1.73m²
+
+LIVER FUNCTION TESTS
+--------------------
+ALT (SGPT): ${15 + Math.floor(Math.random() * 30)} U/L
+AST (SGOT): ${18 + Math.floor(Math.random() * 25)} U/L
+Total Bilirubin: ${0.3 + Math.random() * 0.8} mg/dL
+
+COMPLETE BLOOD COUNT
+--------------------
+Hemoglobin: ${12 + Math.random() * 4} g/dL
+WBC Count: ${4000 + Math.floor(Math.random() * 7000)} cells/µL
+Platelet Count: ${150000 + Math.floor(Math.random() * 250000)} cells/µL
+
+CLINICAL INTERPRETATION
+-----------------------
+${fileContent.substring(0, 200)}...
+
+RECOMMENDATIONS
+---------------
+1. Regular monitoring of blood glucose levels
+2. Maintain healthy diet and exercise routine
+3. Follow up consultation in 3 months
+4. Continue prescribed medications
+
+---
+Report generated from: ${file.name}
+Converted to demo format: ${new Date().toLocaleString()}
+`
+    
+    setConvertedText(demoText)
+  }
+
+  async function handleConverterFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (file) {
+      await convertFileToDemo(file)
+    }
+  }
+
+  function downloadConvertedFile() {
+    const blob = new Blob([convertedText], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `converted-${fileName.replace(/\.[^/.]+$/, '')}.txt`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   function reset() {
     setPhase("idle")
     setFileName("")
@@ -239,12 +338,89 @@ export default function UploadPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[#e8f0fe]">Upload & Scan</h1>
-        <p className="text-sm text-[#7a8ba3]">
-          Upload a medical report PDF and let our AI extract and analyze your health data
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Upload & Scan</h1>
+          <p className="text-sm text-gray-400">
+            Upload a medical report PDF and let our AI extract and analyze your health data
+          </p>
+        </div>
+        <Button
+          onClick={() => setShowConverter(!showConverter)}
+          variant="outline"
+          className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+        >
+          <FileText className="w-4 h-4 mr-2" />
+          File Converter
+        </Button>
       </div>
+
+      {/* File Converter Modal */}
+      {showConverter && (
+        <div className="bg-[#0a0a0a] rounded-xl border border-[#1a1a1a] p-6 shadow-lg">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-white">Convert File to Demo Format</h3>
+            <button
+              onClick={() => {
+                setShowConverter(false)
+                setConvertedText("")
+                setFileName("")
+              }}
+              className="text-gray-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <p className="text-sm text-gray-400 mb-4">
+            Upload any PDF or text file to convert it into our demo medical report format. This helps you create custom test files.
+          </p>
+          
+          <input
+            ref={converterInputRef}
+            type="file"
+            accept=".pdf,.txt,.doc,.docx"
+            onChange={handleConverterFileSelect}
+            className="hidden"
+          />
+          
+          {!convertedText ? (
+            <Button
+              onClick={() => converterInputRef.current?.click()}
+              className="w-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Select File to Convert
+            </Button>
+          ) : (
+            <div className="space-y-4">
+              <div className="bg-[#0f0f0f] rounded-lg border border-[#1a1a1a] p-4 max-h-96 overflow-y-auto">
+                <pre className="text-xs text-gray-300 whitespace-pre-wrap font-mono">
+                  {convertedText}
+                </pre>
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  onClick={downloadConvertedFile}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-emerald-500 text-white"
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Download Converted File
+                </Button>
+                <Button
+                  onClick={() => {
+                    setConvertedText("")
+                    setFileName("")
+                  }}
+                  variant="outline"
+                  className="border-gray-700 text-gray-400 hover:bg-gray-800"
+                >
+                  Convert Another
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Upload zone */}
       {phase === "idle" && (
@@ -256,10 +432,10 @@ export default function UploadPage() {
           onDragLeave={() => setDragActive(false)}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
-          className={`glass-card p-12 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
+          className={`bg-[#0a0a0a] rounded-xl border border-[#1a1a1a] p-12 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 shadow-lg ${
             dragActive
-              ? "border-[#00d4ff] bg-[rgba(0,212,255,0.08)] glow-cyan"
-              : "hover:border-[rgba(0,212,255,0.3)]"
+              ? "border-blue-500 bg-blue-500/5"
+              : "hover:border-blue-500/30"
           }`}
           role="button"
           tabIndex={0}
@@ -275,16 +451,16 @@ export default function UploadPage() {
             onChange={handleFileSelect}
             className="hidden"
           />
-          <div className="w-16 h-16 rounded-2xl bg-[rgba(0,212,255,0.1)] flex items-center justify-center mb-4">
-            <Upload className="w-8 h-8 text-[#00d4ff]" />
+          <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4 border border-blue-500/20">
+            <Upload className="w-8 h-8 text-blue-400" />
           </div>
-          <p className="text-lg font-semibold text-[#e8f0fe] mb-1">
+          <p className="text-lg font-semibold text-white mb-1">
             Drop your medical report here
           </p>
-          <p className="text-sm text-[#7a8ba3]">
+          <p className="text-sm text-gray-400">
             or click to browse. Supports PDF, images, and text files
           </p>
-          <p className="text-xs text-[#4a5568] mt-4">
+          <p className="text-xs text-gray-500 mt-4">
             Try uploading any file - our demo AI will simulate the analysis
           </p>
         </div>

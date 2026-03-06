@@ -99,15 +99,15 @@ export default function DashboardHome() {
   const riskLevel = scanResult?.riskLevel || null
   const confidence = scanResult?.confidence || 0
   
-  // Get latest readings or use demo data
-  const readings = scanResult?.readings || DEMO_READINGS
-  const latestReading = readings[readings.length - 1]
+  // Get latest readings only if scan exists, otherwise show N/A
+  const readings = scanResult?.readings || []
+  const latestReading = readings.length > 0 ? readings[readings.length - 1] : null
 
-  // Calculate trends
-  const glucoseTrend = readings.length > 1 
-    ? ((latestReading.glucose - readings[readings.length - 2].glucose) / readings[readings.length - 2].glucose * 100).toFixed(1)
+  // Calculate trends only if we have scan data
+  const glucoseTrend = scanResult && readings.length > 1 
+    ? ((latestReading!.glucose - readings[readings.length - 2].glucose) / readings[readings.length - 2].glucose * 100).toFixed(1)
     : "0"
-  const bmiTrend = readings.length > 1 && latestReading.bmi && readings[readings.length - 2].bmi
+  const bmiTrend = scanResult && readings.length > 1 && latestReading?.bmi && readings[readings.length - 2].bmi
     ? (((latestReading.bmi - readings[readings.length - 2].bmi!) / readings[readings.length - 2].bmi!) * 100).toFixed(1)
     : "0"
 
@@ -141,36 +141,36 @@ export default function DashboardHome() {
         <MetricCard
           icon={Droplets}
           label="Blood Glucose"
-          value={latestReading.glucose}
-          unit="mg/dL"
-          trend={parseFloat(glucoseTrend) > 0 ? "up" : "down"}
-          trendValue={`${Math.abs(parseFloat(glucoseTrend))}%`}
+          value={latestReading?.glucose || "N/A"}
+          unit={latestReading?.glucose ? "mg/dL" : ""}
+          trend={scanResult && parseFloat(glucoseTrend) > 0 ? "up" : scanResult && parseFloat(glucoseTrend) < 0 ? "down" : undefined}
+          trendValue={scanResult ? `${Math.abs(parseFloat(glucoseTrend))}%` : undefined}
           color="#3b82f6"
           bgColor="bg-blue-500/10"
         />
         <MetricCard
           icon={Weight}
           label="BMI Index"
-          value={latestReading.bmi?.toFixed(1) || "N/A"}
-          unit={latestReading.bmi ? "kg/m²" : ""}
-          trend={parseFloat(bmiTrend) > 0 ? "up" : "down"}
-          trendValue={`${Math.abs(parseFloat(bmiTrend))}%`}
+          value={latestReading?.bmi?.toFixed(1) || "N/A"}
+          unit={latestReading?.bmi ? "kg/m²" : ""}
+          trend={scanResult && parseFloat(bmiTrend) > 0 ? "up" : scanResult && parseFloat(bmiTrend) < 0 ? "down" : undefined}
+          trendValue={scanResult ? `${Math.abs(parseFloat(bmiTrend))}%` : undefined}
           color="#10b981"
           bgColor="bg-emerald-500/10"
         />
         <MetricCard
           icon={Heart}
           label="Heart Rate"
-          value={latestReading.heartRate || "N/A"}
-          unit={latestReading.heartRate ? "BPM" : ""}
+          value={latestReading?.heartRate || "N/A"}
+          unit={latestReading?.heartRate ? "BPM" : ""}
           color="#f59e0b"
           bgColor="bg-amber-500/10"
         />
         <MetricCard
           icon={Gauge}
           label="Blood Pressure"
-          value={`${latestReading.systolic}/${latestReading.diastolic}`}
-          unit="mmHg"
+          value={latestReading ? `${latestReading.systolic}/${latestReading.diastolic}` : "N/A"}
+          unit={latestReading ? "mmHg" : ""}
           color="#ef4444"
           bgColor="bg-red-500/10"
         />
