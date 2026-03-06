@@ -63,10 +63,10 @@ export default function AppointmentsPage() {
         <div>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Calendar className="w-6 h-6 text-blue-500" />
-            Appointments
+            Appointment Reminders
           </h1>
           <p className="text-sm text-gray-400">
-            Schedule and manage medical appointments
+            Set reminders for your upcoming medical appointments
           </p>
         </div>
         <Button
@@ -74,17 +74,17 @@ export default function AppointmentsPage() {
           className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold hover:opacity-90 shadow-lg"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Book Appointment
+          Set Reminder
         </Button>
       </div>
 
-      {/* Booking form */}
+      {/* Reminder form */}
       {showForm && (
         <form onSubmit={handleAdd} className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] p-6 space-y-4 shadow-xl">
-          <h3 className="text-lg font-semibold text-white">Schedule New Appointment</h3>
+          <h3 className="text-lg font-semibold text-white">Set Appointment Reminder</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="appt-doctor" className="text-sm text-gray-400 mb-1 block font-medium">Doctor</label>
+              <label htmlFor="appt-doctor" className="text-sm text-gray-400 mb-1 block font-medium">Doctor / Clinic</label>
               <input
                 id="appt-doctor"
                 type="text"
@@ -95,7 +95,7 @@ export default function AppointmentsPage() {
               />
             </div>
             <div>
-              <label htmlFor="appt-type" className="text-sm text-gray-400 mb-1 block font-medium">Type</label>
+              <label htmlFor="appt-type" className="text-sm text-gray-400 mb-1 block font-medium">Appointment Type</label>
               <select
                 id="appt-type"
                 value={type}
@@ -131,19 +131,19 @@ export default function AppointmentsPage() {
             </div>
           </div>
           <div>
-            <label htmlFor="appt-notes" className="text-sm text-gray-400 mb-1 block font-medium">Notes (optional)</label>
+            <label htmlFor="appt-notes" className="text-sm text-gray-400 mb-1 block font-medium">Reminder Notes (optional)</label>
             <input
               id="appt-notes"
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Reason for appointment..."
+              placeholder="Reason for appointment or reminder notes..."
               className="w-full px-4 py-3 rounded-lg bg-black border border-[#2a2a2a] text-white placeholder:text-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none transition-colors"
             />
           </div>
           <div className="flex gap-3">
             <Button type="submit" className="bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-semibold hover:opacity-90 shadow-lg">
-              Schedule
+              Set Reminder
             </Button>
             <Button type="button" variant="ghost" onClick={() => setShowForm(false)} className="text-gray-400 hover:text-white hover:bg-[#2a2a2a]">
               Cancel
@@ -156,13 +156,13 @@ export default function AppointmentsPage() {
       <div>
         <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
           <Clock className="w-5 h-5 text-blue-500" />
-          Upcoming Appointments ({upcoming.length})
+          Upcoming Reminders ({upcoming.length})
         </h2>
         {upcoming.length === 0 ? (
           <div className="bg-[#1a1a1a] rounded-lg border border-[#2a2a2a] p-12 text-center shadow-xl">
             <Calendar className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400 font-medium">No upcoming appointments</p>
-            <p className="text-sm text-gray-500 mt-1">Click "Book Appointment" to schedule your first visit</p>
+            <p className="text-gray-400 font-medium">No upcoming reminders</p>
+            <p className="text-sm text-gray-500 mt-1">Click "Set Reminder" to add your first appointment reminder</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -205,7 +205,7 @@ export default function AppointmentsPage() {
                         className="text-emerald-400 hover:bg-emerald-500/10 text-xs"
                       >
                         <CheckCircle2 className="w-4 h-4 mr-1" />
-                        Complete
+                        Done
                       </Button>
                       <Button
                         size="sm"
@@ -214,7 +214,7 @@ export default function AppointmentsPage() {
                         className="text-red-400 hover:bg-red-500/10 text-xs"
                       >
                         <XCircle className="w-4 h-4 mr-1" />
-                        Cancel
+                        Remove
                       </Button>
                     </div>
                   </div>
@@ -230,7 +230,7 @@ export default function AppointmentsPage() {
         <div>
           <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-            Past Appointments ({past.length})
+            Past Reminders ({past.length})
           </h2>
           <div className="space-y-3">
             {past.map((a) => {
@@ -266,7 +266,7 @@ export default function AppointmentsPage() {
                       </div>
                     </div>
                     <span className="text-xs font-semibold" style={{ color: sConf.color }}>
-                      {sConf.label}
+                      {sConf.label === "Completed" ? "Done" : sConf.label}
                     </span>
                   </div>
                 </div>
